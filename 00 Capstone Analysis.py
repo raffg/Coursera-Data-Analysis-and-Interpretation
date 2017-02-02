@@ -97,7 +97,10 @@ import scipy.stats
 
 # Create dataframe from original data with NaNs removed
 data_clean = sub1.dropna()
+# Create datafram from logarithms of original data
+data_log = np.log(data_clean.astype('float64'))
 
+# Inspect a linear relationship
 for variable in sub1.columns[1:]:
     print ('Association between ' + info[variable] + ' and GDP Per Capita')
     print (scipy.stats.pearsonr(data_clean[variable], data_clean['x142_2012']))
@@ -108,6 +111,19 @@ for variable in sub1.columns[1:]:
     plt.xlabel('GDP Per Capita')
     plt.ylabel(info[variable])
     plt.title('Scatterplot for the Association Between GDP Per Capita and ' 
+              + info[variable])
+
+
+    # Inspect a logarithmic relationship
+    print ('Association between log of ' + info[variable] + ' and GDP Per Capita')
+    print (scipy.stats.pearsonr(data_log[variable], data_clean['x142_2012']))
+    print ('')
+    
+    plt.figure()
+    scat1 = sns.regplot(x="x142_2012", y=variable, fit_reg=True, data=data_log)
+    plt.xlabel('GDP Per Capita')
+    plt.ylabel('Log of ' + info[variable])
+    plt.title('Scatterplot for the Association Between GDP Per Capita and log of ' 
               + info[variable])
 
 
